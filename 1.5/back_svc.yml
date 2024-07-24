@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+spec:
+  type: NodePort
+  ports:
+  - name: network-multitool-http
+    port: 8080
+    protocol: TCP
+    nodePort: 30002
+  selector:
+    app: backend
