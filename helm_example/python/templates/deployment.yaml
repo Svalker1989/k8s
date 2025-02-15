@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python
+  labels:
+    app: python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+      - name: python
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        # command: ['sh', '-c', "while true; do echo sometext >> /str/file.txt;sleep 5; done"]
+        command: ["/bin/sh"]
+        args: ["-c","python /str/hw.py"]
+        command: ['sh', '-c', "while true; do echo sometext >> /str/file.txt;sleep 5; done"]
+        volumeMounts:
+          - name: script
+            mountPath: /str
+      volumes:
+      - name: script
+        persistentVolumeClaim:
+          claimName: task-pv-claim
